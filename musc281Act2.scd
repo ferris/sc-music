@@ -7,9 +7,9 @@ b = Buffer.alloc(s, s.sampleRate * 600);
 )
 
 (
-Ndef(\pitchshift, { |ratio=0.5, amp=1.2| PitchShift.ar(\in.ar([0, 1]), pitchRatio: ratio, mul: amp) });
+Ndef(\pitchshift, { |ratio=2, amp=1| PitchShift.ar(\in.ar([0, 1]), pitchRatio: ratio, mul: amp) });
 
-Ndef(\reverb, { |dry=1, wet=0.2, revTime=2, amp=0.33|
+Ndef(\reverb, { |dry=0.7, wet=0.5, revTime=2, amp=0.33|
 	var sig = \in.ar([0, 1]);
 
 	sig = (sig * dry) + (wet * NHHall.ar(sig, revTime));
@@ -17,7 +17,7 @@ Ndef(\reverb, { |dry=1, wet=0.2, revTime=2, amp=0.33|
 	sig * amp;
 });
 
-Ndef(\dist, { |hpf_freq=600, lpf_freq=3200, eq_freq=120, rq=0.7, db=8, hpf_amp=5, lpf_amp=0.5, smoothing=1, amp=0.51, amt=0.5|
+Ndef(\dist, { |hpf_freq=600, lpf_freq=3200, eq_freq=120, rq=0.7, db=8, hpf_amp=5, lpf_amp=0.5, smoothing=1, amp=0.51, amt=0.95|
 	var hpf, lpf, eq;
 	var chain, chainsmooth, smooth;
 
@@ -57,13 +57,13 @@ Ndef(\dist, { |hpf_freq=600, lpf_freq=3200, eq_freq=120, rq=0.7, db=8, hpf_amp=5
 Ndef(\ratio, { |val=0.25| DC.kr(val) });
 
 // Orignal Ndef for simple processing
-Ndef(\simpleFX, { |amp=0.75|
+Ndef(\simpleFX, { |amp=0.85|
 	var sig = \in.ar([0, 1]);
 	var filtered = LPF.ar(sig, XLine.kr(5000, 300, 5));
 	filtered * amp;
 });
 
-Ndef(\chorus, { |depth=0.01, rate=2, mix=0.5, dry=1.0, amp=1.0|
+Ndef(\chorus, { |depth=0.1, rate=8, mix=0.25, dry=0.75, amp=1.0|
     var inSig  = \in.ar([0, 1]);
     var chorus = [
         Pan2.ar(DelayC.ar(inSig[0], 1, SinOsc.kr(rate * 0.25 + Rand(-0.1, 0.1), mul: depth, add: depth)), -1),
@@ -78,14 +78,13 @@ Ndef(\chorus, { |depth=0.01, rate=2, mix=0.5, dry=1.0, amp=1.0|
 });
 
 
-
 // Playback of buffered audio through Ndefs
 Ndef(\bufferPlayback, {
 	var buf = PlayBuf.ar(2, ~audioFile, loop: 1);
 	buf;
 });
 
-Ndef(\mouseX, { MouseX.kr(0.5, 20).linexp(0.5, 20, 0.5, 20) });
+/*Ndef(\mouseX, { MouseX.kr(0.5, 20).linexp(0.5, 20, 0.5, 20) });
 Ndef(\mouseY1, { MouseY.kr(0, 0.4) });
 Ndef(\mouseY2, { MouseY.kr(1, 0.7) });
 // Mouse control for parameters
@@ -96,6 +95,42 @@ Ndef(\reverb).set('dry', Ndef(\mouseY2));
 // Route the final audio output to hardware outputs
 // Ndef(\bufferPlayback).play;
 Ndef(\bufferPlayback) <>> Ndef(\chorus) <>> Ndef(\dist) <>> Ndef(\reverb);
-Ndef(\reverb).play;
-)
+Ndef(\reverb).play;*/
 
+
+~task = Task {
+	"[0] Start with simpleFX filter".postln;
+    Ndef(\bufferPlayback) <>> Ndef(\simpleFX);
+	Ndef(\simpleFX).play;
+    5.wait;
+	Ndef(\simpleFX).stop;
+
+	"[1] Switch to raw output (unmodified audio from file)".postln;
+	Ndef(\bufferPlayback).play;
+    5.wait;
+	Ndef(\bufferPlayback).stop;
+
+	"[2] Add in chorus effect".postln;
+	Ndef(\bufferPlayback) <>> Ndef(\chorus);
+	Ndef(\chorus).play;
+	10.wait;
+	Ndef(\chorus).stop;
+
+	"[3] Add in distortion effect".postln;
+	Ndef(\bufferPlayback) <>> Ndef(\chorus) <>> Ndef(\dist);
+	Ndef(\dist).play;
+	10.wait;
+	Ndef(\dist).stop;
+
+	"[4] Add in reverb effect".postln;
+    Ndef(\bufferPlayback) <>> Ndef(\chorus) <>> Ndef(\dist) <>> Ndef(\reverb);
+	Ndef(\reverb).play;
+	10.wait;
+	Ndef(\reverb).stop;
+
+	"[5] Add in pitch shift effect".postln;
+    Ndef(\bufferPlayback) <>> Ndef(\chorus) <>> Ndef(\dist) <>> Ndef(\reverb) <>> Ndef(\pitchshift);
+	Ndef(\pitchshift).play;
+}.play;
+
+)
