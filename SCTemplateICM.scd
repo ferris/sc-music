@@ -40,6 +40,8 @@ s.options.memSize_(2 pow: 20); //2GiB
 /////////////////////
 
 s.waitForBoot {
+	~mainCaller = ("./FMDS.scd").loadRelative.wrapAt(-1);
+
 	///////////////
 	//BUFFER SETUP
 	///////////////
@@ -117,7 +119,29 @@ s.waitForBoot {
 		//Here is where your main Task should go
 
 		~main = Task {
+			~mainCaller.value(55, 100, 115);
+			1.wait;
+			~mainCaller.value(55, 0);
 
+			~mainCaller.value(60, 100, 115);
+			1.wait;
+			~mainCaller.value(60, 0);
+
+			~mainCaller.value(64, 100, 115);
+			1.wait;
+			~mainCaller.value(64, 0);
+
+			~mainCaller.value(60, 100, 115);
+			1.wait;
+			~mainCaller.value(60, 0);
+
+			~mainCaller.value(55, 100, 115);
+			1.wait;
+			~mainCaller.value(55, 0);
+
+			~mainCaller.value(55, 100, 115);
+			1.wait;
+			~mainCaller.value(55, 0);
 		};
 	};
 
