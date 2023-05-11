@@ -25,13 +25,13 @@ Your Piece's Title
 //SERVER SETUP
 ///////////////
 
-//The best way of inventorying your connected input and output hardware and to
-//see what names they give to SuperCollider, boot the server with Cmnd/Ctrl+B and
-//look at what is listed under Number of Devices:
-( //CMND+RETURN/CTRL+ENTER THIS FIRST
-Server.default = s = Server.local; //in case 's' ever gets accidentally overwritten
+// The best way of inventorying your connected input and output hardware and to
+// see what names they give to SuperCollider, boot the server with Cmnd/Ctrl+B and
+// look at what is listed under Number of Devices:
+( // CMND+RETURN/CTRL+ENTER THIS FIRST
+Server.default = s = Server.local; // in case 's' ever gets accidentally overwritten
 
-s.options.memSize_(2 pow: 20); //2GiB
+s.options.memSize_(2 pow: 21); // 4GiB
 )
 
 ( //CMND+RETURN/CTRL+ENTER THIS NEXT
