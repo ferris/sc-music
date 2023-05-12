@@ -664,7 +664,7 @@ s.waitForBoot {
 				PlayBuf.ar(1, bufnum, rate * BufRateScale.kr(bufnum), doneAction: Done.freeSelf).dup;
 			}.play(args: [\bufnum, ~hackMainframeSample]);
 			4.wait;
-			~drumz.start;
+			// ~drumz.start;
 			8.wait;
 			~drumz.start;
 
