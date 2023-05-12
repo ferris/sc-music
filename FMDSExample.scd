@@ -7,11 +7,11 @@
 )
 
 ( // Note On 80 message with velocity value 100 and preset value 10000
-    ~mainCaller.value(1, 1, 1581);
+    ~mainCaller.value(39, 100, 3755);
 )
 
 ( // Note Off message
-	~mainCaller.value(52, 0);
+	~mainCaller.value(39, 0);
 )
 /*
 //Some fun example below. Uncomment this area and run the below parenthesis for random preset and pitch for each note. Check CPU!!

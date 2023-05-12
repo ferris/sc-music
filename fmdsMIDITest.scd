@@ -9,14 +9,20 @@ MIDIIn.connectAll;
 )
 (
 // fun ones:25, 26, 36, 37, 40, 42, 43, 56, 60, 61, 64, 68, 72, 73, 78, 80, 83
-// 86, 100, 105, 106. 108, 115, 116, 118, 121, 122, 128
+// 86, 105, 106. 108, 115, 116, 118, 121, 122,
 // var presetz = Array.fill(128, 1447);
 
 MIDIdef.noteOn(\FMDS, {arg vel, note;
 	// ~mainCaller.value(note, vel, (presetz[0] * 128) + presetz[1]);
 	[note, vel].postln;
-	~mainCaller.value(note, vel, 1581);
+	~mainCaller.value(note, vel, 1412);
 }).add;
+
+// 80 for melody and 68 for bass
+
+// 25? 68? 73? 80? 108? 116?
+// 26,36, 68 FOR BASS?
+// 83, 122 for later
 
 // 13168? 14902?
 
@@ -25,7 +31,7 @@ MIDIdef.noteOn(\FMDS, {arg vel, note;
 // 15958 chime ring
 
 // 1581 kick
-
+//NOTES:: 47,49,50,47,53,50,47,46
 
 
 // 26/56/86/100/108

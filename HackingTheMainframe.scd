@@ -1,33 +1,16 @@
 //////////////////////////////////////
-//SuperCollider Project File Template
-//MUSC 281
-//(c) 2022 Benjamin D. Whiting
+// Hacking The Mainframe
+// MUSC 281
+// (c) 2023 Ferris Linde
 //////////////////////////////////////
-
-/*
-DIRECTIONS:
-1. File > Save As "YourPiece'sTitle.scd" without quotes.
-
-2. Replace the template information above with the following (without brackets or quotes):
-Your Piece's Title
-"(c) 2022 [YourName]"
-
-3. Copy and paste all relevant code into the appropriate ~make Functions below.
-
-4. Place your cursor within the code block under Server Setup and press Cmnd+Return on macOS, or Ctrl+Enter on Windows/Linux.
-
-5. Repeat the previous step beneath where it says GUI VARIABLE SETUP.
-
-6. Depress Start to begin piece.
-*/
 
 ///////////////
 //SERVER SETUP
 ///////////////
 
-//The best way of inventorying your connected input and output hardware and to
-//see what names they give to SuperCollider, boot the server with Cmnd/Ctrl+B and
-//look at what is listed under Number of Devices:
+// The best way of inventorying your connected input and output hardware and to
+// see what names they give to SuperCollider, boot the server with Cmnd/Ctrl+B and
+// look at what is listed under Number of Devices:
 ( //CMND+RETURN/CTRL+ENTER THIS FIRST
 Server.default = s = Server.local; //in case 's' ever gets accidentally overwritten
 
@@ -47,18 +30,6 @@ s.waitForBoot {
 	///////////////
 
 	~makeBuffers = {
-		//First, allocate your buffers for recording and playing back live audio
-		//using the following syntax:
-
-		//~nameOfBuffer = Buffer.alloc(s, numSeconds * s.sampleRate, numChannels);
-
-		//Repeat the above instruction for each buffer you wish to allocate
-
-		//Next, load in any prerecorded sound files you wish for playback:
-		//(MAKE SURE THESE FILES ARE ALL IN YOUR PROJECT DIRECTORY!!!)
-
-		//~nameOfBuffer = Buffer.read(s, PathName(thisProcess.nowExecutingPath).parentPath ++ "NameOfFile.wav"); //You can also load in .aif(f) files
-
 		// INTRO FILES
 		~connectAttemptSample = Buffer.read(s, thisProcess.nowExecutingPath.dirname +/+ "hackerVoice/connectAttempt.aiff");
 		~connectSuccessSample = Buffer.read(s, thisProcess.nowExecutingPath.dirname +/+ "hackerVoice/connectSuccess.aiff");
@@ -78,6 +49,8 @@ s.waitForBoot {
 		~intruderDetectedSample = Buffer.read(s, thisProcess.nowExecutingPath.dirname +/+ "hackerVoice/intruderDetected.aiff");
 		~intruderAlertSample = Buffer.read(s, thisProcess.nowExecutingPath.dirname +/+ "hackerVoice/intruderAlert.aiff");
 		~transferCompleteSample = Buffer.read(s, thisProcess.nowExecutingPath.dirname +/+ "hackerVoice/transferComplete.aiff");
+		~allResourcesSample = Buffer.read(s, thisProcess.nowExecutingPath.dirname +/+ "hackerVoice/allResources.aiff");
+		~allocateBandwidthSample = Buffer.read(s, thisProcess.nowExecutingPath.dirname +/+ "hackerVoice/allocateBandwidth.aiff");
 		~successTooEasySample = Buffer.read(s, thisProcess.nowExecutingPath.dirname +/+ "hackerVoice/successTooEasy.aiff");
 	};
 
@@ -86,7 +59,6 @@ s.waitForBoot {
 	////////////
 
 	~makeSynthDefs = {
-		//Copy-paste your SynthDefs here
 		SynthDef("clap", {
 			arg out = 0, amp = 0.1, pan = 0;
 			var env1, env2, snd, noise1, noise2;
@@ -130,6 +102,17 @@ s.waitForBoot {
 			Out.ar(out, Pan2.ar(snd, pan));
 		}).add;
 
+
+		SynthDef(\chip, {
+			arg amp = 0.5;
+			var snd;
+			snd = (LFPulse.ar(\freq.kr(440) * (2 ** LFPulse.ar(\octaveFreq.kr(3), 0.5))) - (1 / 2)).sign;
+			snd = snd * Env.asr(0.0, 1, 0.0).ar(Done.freeSelf, \gate.kr(1));
+			snd = snd * \amp.kr(-10.dbamp);
+			snd = snd.softclip * amp;
+			snd = Pan2.ar(snd, \pan.kr(0));
+			OffsetOut.ar(\out.kr(0), snd);
+		}).add;
 	};
 
 	////////
@@ -137,17 +120,8 @@ s.waitForBoot {
 	////////
 
 	~makeNdefs = {
-		// add ndefs here
 		Ndef(\kick808).ar(2);
 		Ndef(\clap).ar(2);
-	};
-
-	/////////////////
-	//OSC RESPONDERS
-	/////////////////
-
-	~makeOSC = {
-		//Copy-paste your OSCFuncs/OSCdefs here (if applicable)
 	};
 
 	///////
@@ -157,8 +131,6 @@ s.waitForBoot {
 	~makeMIDI = {
 		MIDIClient.init;
 		MIDIIn.connectAll;
-
-		//Copy-paste your MIDI code here (if applicable)
 	};
 
 	////////
@@ -166,8 +138,6 @@ s.waitForBoot {
 	////////
 
 	~makeTdefs = {
-		//Copy-paste your Tdefs (or Tasks/Routines) here (if applicable)
-
 		~firstIntro128 = Task { // 8 beat, wait for 4 after (12 total)
 			"Starting 1st Intro 128".postln;
 			~mainCaller.value(52, 100, 128); 8.wait;
@@ -450,6 +420,148 @@ s.waitForBoot {
 			~mainCaller.value(38, 0); ~mainCaller.value(35, 100, 68); 1.wait;
 			~mainCaller.value(35, 0);
 		};
+
+		~errorNotice = Task {
+			~mainCaller.value(52, 50, 15081); 2.wait;
+			~mainCaller.value(52, 0); ~mainCaller.value(53, 55, 15081); 2.wait;
+			~mainCaller.value(53, 0); ~mainCaller.value(52, 60, 15081); 2.wait;
+			~mainCaller.value(52, 0); ~mainCaller.value(47, 65, 15081); 2.wait;
+			~mainCaller.value(47, 0); ~mainCaller.value(52, 70, 15081); 2.wait;
+			~mainCaller.value(52, 0); ~mainCaller.value(53, 75, 15081); 2.wait;
+			~mainCaller.value(53, 0); ~mainCaller.value(52, 80, 15081); 2.wait;
+			~mainCaller.value(52, 0); ~mainCaller.value(47, 85, 15081); 2.wait;
+			~mainCaller.value(47, 0); ~mainCaller.value(52, 90, 15081); 2.wait;
+			~mainCaller.value(52, 0); ~mainCaller.value(53, 95, 15081); 2.wait;
+			~mainCaller.value(53, 0); ~mainCaller.value(52, 100, 15081); 2.wait;
+			~mainCaller.value(38, 100, 14695);
+			~mainCaller.value(52, 0); ~mainCaller.value(47, 90, 15081); 2.wait;
+			~mainCaller.value(47, 0); ~mainCaller.value(52, 80, 15081); 2.wait;
+			~mainCaller.value(52, 0); ~mainCaller.value(47, 70, 15081); 2.wait;
+			~mainCaller.value(47, 0); ~mainCaller.value(52, 60, 15081); 2.wait;
+			~mainCaller.value(52, 0); ~mainCaller.value(47, 50, 15081); 2.wait;
+			~mainCaller.value(47, 0); ~mainCaller.value(52, 40, 15081); 2.wait;
+			~mainCaller.value(52, 0); ~mainCaller.value(47, 30, 15081); 2.wait;
+			~mainCaller.value(47, 0);
+			~mainCaller.value(38, 0);
+		};
+
+		~detection = Task {
+			~mainCaller.value(44, 100, 14599);
+			18.wait;
+			~mainCaller.value(44, 0);
+		};
+
+		~alarm = Task {
+			~mainCaller.value(66, 100, 1412);
+			~mainCaller.value(39, 100, 3755);
+			2.wait;
+			~mainCaller.value(39, 100, 3755);
+			2.wait;
+			~mainCaller.value(39, 100, 3755);
+			2.wait;
+			~mainCaller.value(39, 100, 3755);
+			2.wait;
+			~mainCaller.value(39, 100, 3755);
+			2.wait;
+			~mainCaller.value(66, 0);
+			6.wait;
+			~mainCaller.value(66, 100, 1412);
+			~mainCaller.value(39, 100, 3755);
+			2.wait;
+			~mainCaller.value(39, 100, 3755);
+			2.wait;
+			~mainCaller.value(39, 100, 3755);
+			2.wait;
+			~mainCaller.value(39, 100, 3755);
+			2.wait;
+			~mainCaller.value(39, 100, 3755);
+			2.wait;
+			~mainCaller.value(39, 0);
+		};
+
+		~chiptune = Task {
+			1.do {
+				[
+					0, \, \, 0, 12, 7, 3, 0,
+					2, \, \, 8, \, \, -5, \,
+					\, \, \, -5, 7, 3, 0, -5,
+					-7, \, \, -5, \, \, -4, \,
+					-7, \, -5, -4, \, 0, 7, \,
+					8, 7, 5, 4, 5, 7, 8, 7,
+					5, \, -7, 5, \, -7, 7, \,
+					-5, 7, \, -5, 2, 2, 3, 3,
+
+					0, \, \, 0, 12, 7, 3, 0,
+					2, \, \, 8, \, \, -5, \,
+					\, \, \, -5, 7, 3, 0, -5,
+					-7, \, \, -5, \, \, -4, \,
+					-7, \, -5, -4, \, 0, 7, \,
+					8, 7, 5, 4, 5, 7, 8, 7,
+					5, \, -7, 5, \, -7, 7, \,
+					-5, 7, \, -5, 2, 2, 3, 3,
+
+					0, \, 0, 8, \, 8, 7, \,
+					\, \, \, \, \, \, \, \,
+					0, \, 0, 8, \, 8, 7, \,
+					\, \, 7, 5, 3, 5, 7, \,
+					-4, \, -4, 7, \, 7, 5, \,
+					5, 3, \, 3, 2, \, 2, 2,
+					-4, -1, 0, 2, 3, 5, 7, 3,
+					8, 7, 19, 17, 15, 14, 12, 11,
+
+					0, \, 0, 8, \, 8, 7, \,
+					\, \, \, \, \, \, \, \,
+					0, \, 0, 8, \, 8, 7, \,
+					\, \, 7, 5, 3, 5, 7, \,
+					-4, \, -4, 7, \, 7, 5, \,
+					5, 3, \, 3, 2, \, 2, 2,
+					-4, -1, 0, 2, 3, 5, 7, 3,
+					8, 7, 19, 17, 15, 14, 12, 11,
+
+					12, 12, 12, 12, 12, 7, 0, \,
+					-4, \, \, -4, \, 0, -5, \,
+					12, 12, 12, 12, 12, 7, 0, \,
+					-4, \, \, -4, \, 0, -5, \,
+					-7, \, -5, \, -4, \, 0, \,
+					7, \, 0, \, 5, \, 0, \,
+					8, \, -1, \, 7, \, -1, \,
+					10, \, -1, \, 8, \, -1, \,
+
+					12, 12, 12, 12, 12, 7, 0, \,
+					-4, \, \, -4, \, 0, -5, \,
+					12, 12, 12, 12, 12, 7, 0, \,
+					-4, \, \, -4, \, 0, -5, \,
+					-7, \, -5, \, -4, \, 0, \,
+					7, \, 0, \, 5, \, 0, \,
+					8, \, -1, \, 7, \, -1, \,
+					10, \, -1, \, 8, \, -1, \,
+
+					12, 12, 12, 12, 12, 7, 0, \,
+					-4, \, \, -4, \, 0, -5, \,
+					12, 12, 12, 11, 10, 13, 16, \,
+					-4, \, \, -4, \, 0, 5, \,
+					-7, \, -5, \, 5, \, 0, \,
+					7, \, 7, \, 5, \, 5, \,
+					-4, \, -3, \, -4, \, -3, \,
+					-4, \, -3, \, -2, \, -1, 0,
+				].do { |note|
+					var synths, divint;
+					divint = 0.25;
+					if(note == \) {
+						divint.wait;
+					} {
+						synths = [
+							Synth(\chip, [freq: (56 + (12 * 2) + note).midicps, octaveFreq: 16]),
+							Synth(\chip, [freq: (56 + (12 * -1) + note).midicps, octaveFreq: 8]),
+						];
+						(divint * 0.7).wait;
+						synths[0].set(\gate, 0);
+						synths[1].set(\gate, 0);
+						(divint * (1 - 0.7)).wait;
+					};
+				};
+			};
+		};
 	};
 
 	////////
@@ -457,8 +569,6 @@ s.waitForBoot {
 	////////
 
 	~makePdefs = {
-		//Copy-paste your Pdefs here (if applicable)
-
 		Pbindef(\kick808,
 			\instrument, "kick808",
 			\dur, Pseq([
@@ -512,10 +622,7 @@ s.waitForBoot {
 	///////
 
 	TempoClock.default.tempo = 2;
-
 	~makeTask = {
-		// Here is where your main Task should go
-		// Need it to be at least 360 beats total
 		~main = Task {
 			~firstIntro128.start;
 			8.wait;
@@ -523,9 +630,7 @@ s.waitForBoot {
 				PlayBuf.ar(1, bufnum, rate * BufRateScale.kr(bufnum), doneAction: Done.freeSelf).dup;
 			}.play(args: [\bufnum, ~connectAttemptSample]);
 			4.wait;
-
 			//////////////////////////////// 12 beats
-
 			~firstIntro128.start;
 			12.wait;
 			~firstIntro128.start;
@@ -537,27 +642,20 @@ s.waitForBoot {
 			~firstIntro128.start;
 			~firstIntro100.start;
 			12.wait;
-
 			//////////////////////////////// 48 beats
-
 			~secondIntro128.start;
 			{ |rate=1, bufnum|
 				PlayBuf.ar(1, bufnum, rate * BufRateScale.kr(bufnum), doneAction: Done.freeSelf).dup;
 			}.play(args: [\bufnum, ~establishTCPSample]);
 			32.wait;
-
-
 			//////////////////////////////// 80 beats
-
 			~thirdIntro.start;
 			16.wait;
 			{ |rate=1, bufnum|
 				PlayBuf.ar(1, bufnum, rate * BufRateScale.kr(bufnum), doneAction: Done.freeSelf).dup;
 			}.play(args: [\bufnum, ~handshakeCompleteSample]);
 			16.wait;
-
 			//////////////////////////////// 112 beats
-
 			~fourthIntro.start;
 			16.wait;
 			~drumz.start;
@@ -569,8 +667,9 @@ s.waitForBoot {
 			~drumz.start;
 			8.wait;
 			~drumz.start;
-			// 2.wait;
-			//////////////////////////////// 144 (146) beats
+
+			//////////////////////////////// 144 beats
+
 			~melody80v25.start;
 			~bassline68v25.start;
 			8.wait;
@@ -607,6 +706,7 @@ s.waitForBoot {
 
 			//////////////////////////////// 208 beats
 
+			~errorNotice.start;
 			{ |rate=1, bufnum|
 				PlayBuf.ar(1, bufnum, rate * BufRateScale.kr(bufnum), doneAction: Done.freeSelf).dup;
 			}.play(args: [\bufnum, ~kernelProblemSample]);
@@ -617,6 +717,7 @@ s.waitForBoot {
 			}.play(args: [\bufnum, ~onToUsSample]);
 			6.wait;
 
+			~detection.start;
 			{ |rate=1, bufnum|
 				PlayBuf.ar(1, bufnum, rate * BufRateScale.kr(bufnum), doneAction: Done.freeSelf).dup;
 			}.play(args: [\bufnum, ~traceSourceSample]);
@@ -627,15 +728,69 @@ s.waitForBoot {
 			}.play(args: [\bufnum, ~exfiltrateDataSample]);
 			12.wait;
 
-			//////////////////////////////// ? 244 beats
+			//////////////////////////////// 244 beats
 
 			{ |rate=1, bufnum|
 				PlayBuf.ar(1, bufnum, rate * BufRateScale.kr(bufnum), doneAction: Done.freeSelf).dup;
-			}.play(args: [\bufnum, ~intruderDetectedSample]);
+			}.play(args: [\bufnum, ~intruderAlertSample]);
+			4.wait;
+			~alarm.start;
+			{ |rate=1, bufnum|
+				PlayBuf.ar(1, bufnum, rate * BufRateScale.kr(bufnum), doneAction: Done.freeSelf).dup;
+			}.play(args: [\bufnum, ~intruderAlertSample]);
+			4.wait;
+			{ |rate=1, bufnum|
+				PlayBuf.ar(1, bufnum, rate * BufRateScale.kr(bufnum), doneAction: Done.freeSelf).dup;
+			}.play(args: [\bufnum, ~intruderAlertSample]);
+			4.wait;
+			{ |rate=1, bufnum|
+				PlayBuf.ar(1, bufnum, rate * BufRateScale.kr(bufnum), doneAction: Done.freeSelf).dup;
+			}.play(args: [\bufnum, ~intruderAlertSample]);
+			4.wait;
+			{ |rate=1, bufnum|
+				PlayBuf.ar(1, bufnum, rate * BufRateScale.kr(bufnum), doneAction: Done.freeSelf).dup;
+			}.play(args: [\bufnum, ~intruderAlertSample]);
+			4.wait;
+			{ |rate=1, bufnum|
+				PlayBuf.ar(1, bufnum, rate * BufRateScale.kr(bufnum), doneAction: Done.freeSelf).dup;
+			}.play(args: [\bufnum, ~intruderAlertSample]);
+			4.wait;
+			{ |rate=1, bufnum|
+				PlayBuf.ar(1, bufnum, rate * BufRateScale.kr(bufnum), doneAction: Done.freeSelf).dup;
+			}.play(args: [\bufnum, ~intruderAlertSample]);
+			4.wait;
+			{ |rate=1, bufnum|
+				PlayBuf.ar(1, bufnum, rate * BufRateScale.kr(bufnum), doneAction: Done.freeSelf).dup;
+			}.play(args: [\bufnum, ~intruderAlertSample]);
+			4.wait;
+			{ |rate=1, bufnum|
+				PlayBuf.ar(1, bufnum, rate * BufRateScale.kr(bufnum), doneAction: Done.freeSelf).dup;
+			}.play(args: [\bufnum, ~intruderAlertSample]);
 			4.wait;
 
+			//////////////////////////////// 280 beats
 
-			//////////////////////////////// 360 beats
+			{ |rate=1, bufnum|
+				PlayBuf.ar(1, bufnum, rate * BufRateScale.kr(bufnum), doneAction: Done.freeSelf).dup;
+			}.play(args: [\bufnum, ~allResourcesSample]);
+			8.wait;
+			{ |rate=1, bufnum|
+				PlayBuf.ar(1, bufnum, rate * BufRateScale.kr(bufnum), doneAction: Done.freeSelf).dup;
+			}.play(args: [\bufnum, ~allocateBandwidthSample]);
+			8.wait;
+
+			~chiptune.start; // size of chiptune is ~112 beats
+
+			115.wait;
+			{ |rate=1, bufnum|
+				PlayBuf.ar(1, bufnum, rate * BufRateScale.kr(bufnum), doneAction: Done.freeSelf).dup;
+			}.play(args: [\bufnum, ~transferCompleteSample]);
+			4.wait;
+			{ |rate=1, bufnum|
+				PlayBuf.ar(1, bufnum, rate * BufRateScale.kr(bufnum), doneAction: Done.freeSelf).dup;
+			}.play(args: [\bufnum, ~successTooEasySample]);
+
+			//////////////////////////////// 415 beats
 		};
 	};
 
