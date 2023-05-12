@@ -58,6 +58,23 @@ s.waitForBoot {
 		//(MAKE SURE THESE FILES ARE ALL IN YOUR PROJECT DIRECTORY!!!)
 
 		//~nameOfBuffer = Buffer.read(s, PathName(thisProcess.nowExecutingPath).parentPath ++ "NameOfFile.wav"); //You can also load in .aif(f) files
+
+		~connectAttemptSample = Buffer.read(s, thisProcess.nowExecutingPath.dirname +/+ "hackerVoice/connectAttempt.aiff");
+		~connectSuccessSample = Buffer.read(s, thisProcess.nowExecutingPath.dirname +/+ "hackerVoice/connectSuccess.aiff");
+		~establishTCPSample = Buffer.read(s, thisProcess.nowExecutingPath.dirname +/+ "hackerVoice/establishTCP.aiff");
+		~handshakeCompleteSample = Buffer.read(s, thisProcess.nowExecutingPath.dirname +/+ "hackerVoice/handshakeComplete.aiff");
+		~hackMainframeSample = Buffer.read(s, thisProcess.nowExecutingPath.dirname +/+ "hackerVoice/hackMainframe.aiff");
+		~weAreInSample = Buffer.read(s, thisProcess.nowExecutingPath.dirname +/+ "hackerVoice/weAreIn.aiff");
+		~copyingDataSample = Buffer.read(s, thisProcess.nowExecutingPath.dirname +/+ "hackerVoice/copyingData.aiff");
+		~nowWeWaitSample = Buffer.read(s, thisProcess.nowExecutingPath.dirname +/+ "hackerVoice/nowWeWait.aiff");
+		~kernelProblemSample = Buffer.read(s, thisProcess.nowExecutingPath.dirname +/+ "hackerVoice/kernelProblem.aiff");
+		~onToUsSample = Buffer.read(s, thisProcess.nowExecutingPath.dirname +/+ "hackerVoice/onToUs.aiff");
+		~traceSourceSample = Buffer.read(s, thisProcess.nowExecutingPath.dirname +/+ "hackerVoice/traceSource.aiff");
+		~exfiltrateDataSample = Buffer.read(s, thisProcess.nowExecutingPath.dirname +/+ "hackerVoice/exfiltrateData.aiff");
+		~intruderDetectedSample = Buffer.read(s, thisProcess.nowExecutingPath.dirname +/+ "hackerVoice/intruderDetected.aiff");
+		~intruderAlertSample = Buffer.read(s, thisProcess.nowExecutingPath.dirname +/+ "hackerVoice/intruderAlert.aiff");
+		~transferCompleteSample = Buffer.read(s, thisProcess.nowExecutingPath.dirname +/+ "hackerVoice/transferComplete.aiff");
+		~successTooEasySample = Buffer.read(s, thisProcess.nowExecutingPath.dirname +/+ "hackerVoice/successTooEasy.aiff");
 	};
 
 	////////////
@@ -73,7 +90,7 @@ s.waitForBoot {
 	////////
 
 	~makeNdefs = {
-		//Copy-paste your Ndefs here
+		// add ndefs here
 	};
 
 	/////////////////
@@ -177,11 +194,19 @@ s.waitForBoot {
 		// Need it to be at least 360 beats total
 		~main = Task {
 			~firstIntro128.start;
-			12.wait;
+			8.wait;
+			{ |rate=1, bufnum|
+				PlayBuf.ar(1, bufnum, rate * BufRateScale.kr(bufnum), doneAction: Done.freeSelf).dup;
+			}.play(args: [\bufnum, ~connectAttemptSample]);
+			4.wait;
+
 			~firstIntro128.start;
 			12.wait;
 			~firstIntro128.start;
 			~firstIntro100.start;
+			{ |rate=1, bufnum|
+				PlayBuf.ar(1, bufnum, rate * BufRateScale.kr(bufnum), doneAction: Done.freeSelf).dup;
+			}.play(args: [\bufnum, ~connectSuccessSample]);
 			12.wait;
 			~firstIntro128.start;
 			~firstIntro100.start;
@@ -190,6 +215,9 @@ s.waitForBoot {
 			//////////////////////////////// 48 beats
 
 			~secondIntro128.start;
+			{ |rate=1, bufnum|
+				PlayBuf.ar(1, bufnum, rate * BufRateScale.kr(bufnum), doneAction: Done.freeSelf).dup;
+			}.play(args: [\bufnum, ~establishTCPSample]);
 			32.wait;
 
 			//////////////////////////////// 80 beats
