@@ -101,6 +101,61 @@ s.waitForBoot {
 
 	~makeTdefs = {
 		//Copy-paste your Tdefs (or Tasks/Routines) here (if applicable)
+
+		~firstIntro128 = Task { // 20 beat, wait for 4 after (24 total)
+			"Starting 1st Intro 128".postln;
+			~mainCaller.value(52, 100, 128);
+			8.wait;
+			~mainCaller.value(52, 0);
+			"Done with 1st Intro 128".postln;
+		};
+
+		~firstIntro100 = Task { // 4 beats
+			"Starting 1st Intro 100".postln;
+			~mainCaller.value(89, 100, 100);
+			2.wait;
+			~mainCaller.value(89, 0);
+			~mainCaller.value(86, 100, 100);
+			2.wait;
+			~mainCaller.value(86, 0);
+			~mainCaller.value(83, 100, 100);
+			2.wait;
+			~mainCaller.value(83, 0);
+			~mainCaller.value(76, 100, 100);
+			2.wait;
+			~mainCaller.value(76, 0);
+			"Done with 1st Intro 100".postln;
+		};
+
+		~secondIntro128 = Task { // 16 beats
+			"Starting 2nd Intro 128".postln;
+			~mainCaller.value(52, 100, 128);
+			4.wait;
+			~mainCaller.value(52, 0);
+			~mainCaller.value(47, 100, 128);
+			4.wait;
+			~mainCaller.value(47, 0);
+			~mainCaller.value(53, 100, 128);
+			4.wait;
+			~mainCaller.value(53, 0);
+			~mainCaller.value(50, 100, 128);
+			4.wait;
+			~mainCaller.value(50, 0);
+			~mainCaller.value(52, 100, 128);
+			4.wait;
+			~mainCaller.value(52, 0);
+			~mainCaller.value(47, 100, 128);
+			4.wait;
+			~mainCaller.value(47, 0);
+			~mainCaller.value(53, 100, 128);
+			4.wait;
+			~mainCaller.value(53, 0);
+			~mainCaller.value(50, 100, 128);
+			4.wait;
+			~mainCaller.value(50, 0);
+			"Done with 2nd Intro 128".postln;
+		};
+
 	};
 
 	////////
@@ -115,33 +170,33 @@ s.waitForBoot {
 	//TASK
 	///////
 
+	TempoClock.default.tempo = 2;
+
 	~makeTask = {
-		//Here is where your main Task should go
-
+		// Here is where your main Task should go
+		// Need it to be at least 360 beats total
 		~main = Task {
-			~mainCaller.value(55, 100, 115);
-			1.wait;
-			~mainCaller.value(55, 0);
+			~firstIntro128.start;
+			12.wait;
+			~firstIntro128.start;
+			12.wait;
+			~firstIntro128.start;
+			~firstIntro100.start;
+			12.wait;
+			~firstIntro128.start;
+			~firstIntro100.start;
+			12.wait;
 
-			~mainCaller.value(60, 100, 115);
-			1.wait;
-			~mainCaller.value(60, 0);
+			//////////////////////////////// 48 beats
 
-			~mainCaller.value(64, 100, 115);
-			1.wait;
-			~mainCaller.value(64, 0);
+			~secondIntro128.start;
+			32.wait;
 
-			~mainCaller.value(60, 100, 115);
-			1.wait;
-			~mainCaller.value(60, 0);
+			//////////////////////////////// 80 beats
 
-			~mainCaller.value(55, 100, 115);
-			1.wait;
-			~mainCaller.value(55, 0);
+			//////////////////////////////// ?? beats
 
-			~mainCaller.value(55, 100, 115);
-			1.wait;
-			~mainCaller.value(55, 0);
+			//////////////////////////////// 360 beats
 		};
 	};
 
