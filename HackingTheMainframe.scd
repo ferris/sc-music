@@ -119,7 +119,7 @@ s.waitForBoot {
 	~makeTdefs = {
 		//Copy-paste your Tdefs (or Tasks/Routines) here (if applicable)
 
-		~firstIntro128 = Task { // 20 beat, wait for 4 after (24 total)
+		~firstIntro128 = Task { // 8 beat, wait for 4 after (12 total)
 			"Starting 1st Intro 128".postln;
 			~mainCaller.value(52, 100, 128);
 			8.wait;
@@ -127,7 +127,7 @@ s.waitForBoot {
 			"Done with 1st Intro 128".postln;
 		};
 
-		~firstIntro100 = Task { // 4 beats
+		~firstIntro100 = Task { // 8 beats
 			"Starting 1st Intro 100".postln;
 			~mainCaller.value(89, 100, 100);
 			2.wait;
@@ -144,7 +144,7 @@ s.waitForBoot {
 			"Done with 1st Intro 100".postln;
 		};
 
-		~secondIntro128 = Task { // 16 beats
+		~secondIntro128 = Task { // 32 beats
 			"Starting 2nd Intro 128".postln;
 			~mainCaller.value(52, 100, 128);
 			4.wait;
@@ -171,6 +171,61 @@ s.waitForBoot {
 			4.wait;
 			~mainCaller.value(50, 0);
 			"Done with 2nd Intro 128".postln;
+		};
+
+		~thirdIntro = Task { // 32 beats
+			"Starting 3rd Intro 128".postln;
+			~mainCaller.value(52, 100, 128);
+			2.wait;
+			~mainCaller.value(76, 50, 8503);
+			2.wait;
+			~mainCaller.value(52, 0);
+			~mainCaller.value(47, 100, 128);
+			2.wait;
+			~mainCaller.value(76, 0);
+			~mainCaller.value(71, 50, 8503);
+			2.wait;
+			~mainCaller.value(47, 0);
+			~mainCaller.value(53, 100, 128);
+			2.wait;
+			~mainCaller.value(71, 0);
+			~mainCaller.value(77, 50, 8503);
+			2.wait;
+			~mainCaller.value(53, 0);
+			~mainCaller.value(50, 100, 128);
+			2.wait;
+			~mainCaller.value(77, 0);
+			~mainCaller.value(74, 50, 8503);
+			2.wait;
+			~mainCaller.value(50, 0);
+			// halfway
+			~mainCaller.value(52, 100, 128);
+			2.wait;
+			~mainCaller.value(74, 0);
+			~mainCaller.value(76, 50, 8503);
+			2.wait;
+			~mainCaller.value(52, 0);
+			~mainCaller.value(47, 100, 128);
+			2.wait;
+			~mainCaller.value(76, 0);
+			~mainCaller.value(71, 50, 8503);
+			2.wait;
+			~mainCaller.value(47, 0);
+			~mainCaller.value(53, 100, 128);
+			2.wait;
+			~mainCaller.value(71, 0);
+			~mainCaller.value(77, 50, 8503);
+			2.wait;
+			~mainCaller.value(53, 0);
+			~mainCaller.value(50, 100, 128);
+			2.wait;
+			~mainCaller.value(77, 0);
+			~mainCaller.value(74, 50, 8503);
+			2.wait;
+			~mainCaller.value(50, 0);
+			2.wait;
+			~mainCaller.value(74, 0);
+			"Done with 3rd Intro 128/8053".postln;
 		};
 
 	};
@@ -200,6 +255,8 @@ s.waitForBoot {
 			}.play(args: [\bufnum, ~connectAttemptSample]);
 			4.wait;
 
+			//////////////////////////////// 12 beats
+
 			~firstIntro128.start;
 			12.wait;
 			~firstIntro128.start;
@@ -222,7 +279,15 @@ s.waitForBoot {
 
 			//////////////////////////////// 80 beats
 
-			//////////////////////////////// ?? beats
+			~thirdIntro.start;
+			{ |rate=1, bufnum|
+				PlayBuf.ar(1, bufnum, rate * BufRateScale.kr(bufnum), doneAction: Done.freeSelf).dup;
+			}.play(args: [\bufnum, ~handshakeCompleteSample]);
+			32.wait;
+
+			//////////////////////////////// 114 beats
+
+			//////////////////////////////// ??? beats
 
 			//////////////////////////////// 360 beats
 		};
