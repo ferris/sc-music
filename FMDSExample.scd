@@ -7,7 +7,7 @@
 )
 
 ( // Note On 80 message with velocity value 100 and preset value 10000
-    ~mainCaller.value(52, 67, 128);
+    ~mainCaller.value(1, 1, 1581);
 )
 
 ( // Note Off message

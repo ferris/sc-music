@@ -59,10 +59,12 @@ s.waitForBoot {
 
 		//~nameOfBuffer = Buffer.read(s, PathName(thisProcess.nowExecutingPath).parentPath ++ "NameOfFile.wav"); //You can also load in .aif(f) files
 
+		// INTRO FILES
 		~connectAttemptSample = Buffer.read(s, thisProcess.nowExecutingPath.dirname +/+ "hackerVoice/connectAttempt.aiff");
 		~connectSuccessSample = Buffer.read(s, thisProcess.nowExecutingPath.dirname +/+ "hackerVoice/connectSuccess.aiff");
 		~establishTCPSample = Buffer.read(s, thisProcess.nowExecutingPath.dirname +/+ "hackerVoice/establishTCP.aiff");
 		~handshakeCompleteSample = Buffer.read(s, thisProcess.nowExecutingPath.dirname +/+ "hackerVoice/handshakeComplete.aiff");
+		// idk what to call this yet TODO TODO TODO
 		~hackMainframeSample = Buffer.read(s, thisProcess.nowExecutingPath.dirname +/+ "hackerVoice/hackMainframe.aiff");
 		~weAreInSample = Buffer.read(s, thisProcess.nowExecutingPath.dirname +/+ "hackerVoice/weAreIn.aiff");
 		~copyingDataSample = Buffer.read(s, thisProcess.nowExecutingPath.dirname +/+ "hackerVoice/copyingData.aiff");
@@ -83,6 +85,49 @@ s.waitForBoot {
 
 	~makeSynthDefs = {
 		//Copy-paste your SynthDefs here
+		SynthDef("clap", {
+			arg out = 0, amp = 0.1, pan = 0;
+			var env1, env2, snd, noise1, noise2;
+
+			env1 = Env.new(
+				levels: [0, 1, 0, 1, 0, 1, 0, 1, 0],
+				times: [0.001, 0.013, 0, 0.01, 0, 0.01, 0, 0.03],
+				curve: [0, -3, 0, -3, 0, -3, 0, -4]
+			).ar;
+			env2 = Env.new(
+				levels: [0, 1, 0],
+				times: [0.02, 0.3],
+				curve: [0, -4]
+			).ar(doneAction: 2);
+
+			noise1 = WhiteNoise.ar(env1);
+			noise1 = HPF.ar(noise1, 600);
+			noise1 = BPF.ar(noise1, 2000, 3);
+
+			noise2 = WhiteNoise.ar(env2);
+			noise2 = HPF.ar(noise2, 1000);
+			noise2 = BPF.ar(noise2, 1200, 0.7, 0.7);
+
+			snd = noise1 + noise2;
+			snd = snd * 2;
+			snd = snd.softclip * amp;
+
+			Out.ar(out, Pan2.ar(snd, pan));
+		}).add;
+
+
+		SynthDef("kick808", {arg out = 0, freq1 = 240, freq2 = 60, amp = 0.1, ringTime = 10, att = 0.001, rel = 1, dist = 0.5, pan = 0;
+			var snd, env;
+			snd = Ringz.ar(
+				in: Impulse.ar(0), // single impulse
+				freq: XLine.ar(freq1, freq2, 0.1),
+				decaytime: ringTime);
+			env = Env.perc(att, rel, amp).kr(doneAction: 2);
+			snd = (1.0 - dist) * snd + (dist * (snd.distort));
+			snd = snd * env;
+			Out.ar(out, Pan2.ar(snd, pan));
+		}).add;
+
 	};
 
 	////////
@@ -91,6 +136,8 @@ s.waitForBoot {
 
 	~makeNdefs = {
 		// add ndefs here
+		Ndef(\kick808).ar(2);
+		Ndef(\clap).ar(2);
 	};
 
 	/////////////////
@@ -121,113 +168,93 @@ s.waitForBoot {
 
 		~firstIntro128 = Task { // 8 beat, wait for 4 after (12 total)
 			"Starting 1st Intro 128".postln;
-			~mainCaller.value(52, 100, 128);
-			8.wait;
+			~mainCaller.value(52, 100, 128); 8.wait;
 			~mainCaller.value(52, 0);
 			"Done with 1st Intro 128".postln;
 		};
 
 		~firstIntro100 = Task { // 8 beats
 			"Starting 1st Intro 100".postln;
-			~mainCaller.value(89, 100, 100);
-			2.wait;
-			~mainCaller.value(89, 0);
-			~mainCaller.value(86, 100, 100);
-			2.wait;
-			~mainCaller.value(86, 0);
-			~mainCaller.value(83, 100, 100);
-			2.wait;
-			~mainCaller.value(83, 0);
-			~mainCaller.value(76, 100, 100);
-			2.wait;
+			~mainCaller.value(89, 100, 100); 2.wait;
+			~mainCaller.value(89, 0); ~mainCaller.value(86, 100, 100); 2.wait;
+			~mainCaller.value(86, 0); ~mainCaller.value(83, 100, 100); 2.wait;
+			~mainCaller.value(83, 0); ~mainCaller.value(76, 100, 100); 2.wait;
 			~mainCaller.value(76, 0);
 			"Done with 1st Intro 100".postln;
 		};
 
 		~secondIntro128 = Task { // 32 beats
 			"Starting 2nd Intro 128".postln;
-			~mainCaller.value(52, 100, 128);
-			4.wait;
-			~mainCaller.value(52, 0);
-			~mainCaller.value(47, 100, 128);
-			4.wait;
-			~mainCaller.value(47, 0);
-			~mainCaller.value(53, 100, 128);
-			4.wait;
-			~mainCaller.value(53, 0);
-			~mainCaller.value(50, 100, 128);
-			4.wait;
-			~mainCaller.value(50, 0);
-			~mainCaller.value(52, 100, 128);
-			4.wait;
-			~mainCaller.value(52, 0);
-			~mainCaller.value(47, 100, 128);
-			4.wait;
-			~mainCaller.value(47, 0);
-			~mainCaller.value(53, 100, 128);
-			4.wait;
-			~mainCaller.value(53, 0);
-			~mainCaller.value(50, 100, 128);
-			4.wait;
+			~mainCaller.value(52, 100, 128); 4.wait;
+			~mainCaller.value(52, 0); ~mainCaller.value(47, 100, 128); 4.wait;
+			~mainCaller.value(47, 0); ~mainCaller.value(53, 100, 128); 4.wait;
+			~mainCaller.value(53, 0); ~mainCaller.value(50, 100, 128); 4.wait;
+			~mainCaller.value(50, 0); ~mainCaller.value(52, 100, 128); 4.wait;
+			~mainCaller.value(52, 0); ~mainCaller.value(47, 100, 128); 4.wait;
+			~mainCaller.value(47, 0); ~mainCaller.value(53, 100, 128); 4.wait;
+			~mainCaller.value(53, 0); ~mainCaller.value(50, 100, 128); 4.wait;
 			~mainCaller.value(50, 0);
 			"Done with 2nd Intro 128".postln;
 		};
 
 		~thirdIntro = Task { // 32 beats
-			"Starting 3rd Intro 128".postln;
-			~mainCaller.value(52, 100, 128);
-			2.wait;
-			~mainCaller.value(76, 50, 8503);
-			2.wait;
-			~mainCaller.value(52, 0);
-			~mainCaller.value(47, 100, 128);
-			2.wait;
-			~mainCaller.value(76, 0);
-			~mainCaller.value(71, 50, 8503);
-			2.wait;
-			~mainCaller.value(47, 0);
-			~mainCaller.value(53, 100, 128);
-			2.wait;
-			~mainCaller.value(71, 0);
-			~mainCaller.value(77, 50, 8503);
-			2.wait;
-			~mainCaller.value(53, 0);
-			~mainCaller.value(50, 100, 128);
-			2.wait;
-			~mainCaller.value(77, 0);
-			~mainCaller.value(74, 50, 8503);
-			2.wait;
+			"Starting 3rd Intro 128/8503".postln;
+			~mainCaller.value(52, 100, 128); 2.wait;
+			~mainCaller.value(76, 50, 8503); 2.wait;
+			~mainCaller.value(52, 0); ~mainCaller.value(47, 100, 128); 2.wait;
+			~mainCaller.value(76, 0); ~mainCaller.value(71, 50, 8503); 2.wait;
+			~mainCaller.value(47, 0); ~mainCaller.value(53, 100, 128); 2.wait;
+			~mainCaller.value(71, 0); ~mainCaller.value(77, 50, 8503); 2.wait;
+			~mainCaller.value(53, 0); ~mainCaller.value(50, 100, 128); 2.wait;
+			~mainCaller.value(77, 0); ~mainCaller.value(74, 50, 8503); 2.wait;
 			~mainCaller.value(50, 0);
 			// halfway
-			~mainCaller.value(52, 100, 128);
-			2.wait;
+			~mainCaller.value(52, 100, 128); 2.wait;
+			~mainCaller.value(74, 0); ~mainCaller.value(76, 50, 8503); 2.wait;
+			~mainCaller.value(52, 0); ~mainCaller.value(47, 100, 128); 2.wait;
+			~mainCaller.value(76, 0); ~mainCaller.value(71, 50, 8503); 2.wait;
+			~mainCaller.value(47, 0); ~mainCaller.value(53, 100, 128); 2.wait;
+			~mainCaller.value(71, 0); ~mainCaller.value(77, 50, 8503); 2.wait;
+			~mainCaller.value(53, 0); ~mainCaller.value(50, 100, 128); 2.wait;
+			~mainCaller.value(77, 0); ~mainCaller.value(74, 50, 8503); 2.wait;
+			~mainCaller.value(50, 0); 2.wait;
 			~mainCaller.value(74, 0);
-			~mainCaller.value(76, 50, 8503);
-			2.wait;
-			~mainCaller.value(52, 0);
-			~mainCaller.value(47, 100, 128);
-			2.wait;
-			~mainCaller.value(76, 0);
-			~mainCaller.value(71, 50, 8503);
-			2.wait;
-			~mainCaller.value(47, 0);
-			~mainCaller.value(53, 100, 128);
-			2.wait;
-			~mainCaller.value(71, 0);
-			~mainCaller.value(77, 50, 8503);
-			2.wait;
-			~mainCaller.value(53, 0);
-			~mainCaller.value(50, 100, 128);
-			2.wait;
-			~mainCaller.value(77, 0);
-			~mainCaller.value(74, 50, 8503);
-			2.wait;
-			~mainCaller.value(50, 0);
-			2.wait;
-			~mainCaller.value(74, 0);
-			"Done with 3rd Intro 128/8053".postln;
+			"Done with 3rd Intro 128/8503".postln;
 		};
 
+		~fourthIntro = Task { // 34 beats
+			"Starting 4th Intro 15415/8503".postln;
+			~mainCaller.value(52, 100, 15415); 2.wait;
+			~mainCaller.value(76, 50, 8503); 2.wait;
+			~mainCaller.value(52, 0); ~mainCaller.value(47, 100, 15415); 2.wait;
+			~mainCaller.value(76, 0); ~mainCaller.value(71, 50, 8503); 2.wait;
+			~mainCaller.value(47, 0); ~mainCaller.value(53, 100, 15415); 2.wait;
+			~mainCaller.value(71, 0); ~mainCaller.value(77, 50, 8503); 2.wait;
+			~mainCaller.value(53, 0); ~mainCaller.value(50, 100, 15415); 2.wait;
+			~mainCaller.value(77, 0); ~mainCaller.value(74, 50, 8503); 2.wait;
+			~mainCaller.value(50, 0);
+			// halfway
+			~mainCaller.value(52, 100, 15415); 2.wait;
+			~mainCaller.value(74, 0); ~mainCaller.value(76, 50, 8503); 2.wait;
+			~mainCaller.value(52, 0); ~mainCaller.value(47, 100, 15415); 2.wait;
+			~mainCaller.value(76, 0); ~mainCaller.value(71, 50, 8503); 2.wait;
+			~mainCaller.value(47, 0); ~mainCaller.value(53, 100, 15415); 2.wait;
+			~mainCaller.value(71, 0); ~mainCaller.value(77, 50, 8503); 2.wait;
+			~mainCaller.value(53, 0); ~mainCaller.value(50, 100, 15415); 2.wait;
+			~mainCaller.value(77, 0); ~mainCaller.value(74, 50, 8503); 2.wait;
+			~mainCaller.value(50, 0); 2.wait;
+			~mainCaller.value(74, 0);
+			"Done with 4th Intro 15415/8053".postln;
+		};
+
+		~drumKicks = Task {
+			Ndef(\kick808, Pdef(\kick808)).play;
+			Ndef(\clap, Pdef(\clap)).play;
+			8.wait;
+			Ndef(\kick808, Pdef(\kick808)).play;
+			Ndef(\clap, Pdef(\clap)).play;
+			8.wait;
+		};
 	};
 
 	////////
@@ -236,6 +263,30 @@ s.waitForBoot {
 
 	~makePdefs = {
 		//Copy-paste your Pdefs here (if applicable)
+
+		Pbindef(\kick808,
+			\instrument, "kick808",
+			\dur, Pseq([
+				3/4, 1/4,
+				1/2, 1/2,
+				Rest(1),
+				1/4, Rest(3/4)
+			], 2) * 1.0,
+			\amp, 0.2,
+			\rel, 0.7,
+			\dist, Pseries(0.1, 0.1, 16)
+		);
+
+		Pbindef(\clap,
+			\instrument, "clap",
+			\dur, Pseq([
+				Rest(5/2), 1/2,
+				Rest(1/2), 1/2
+			], 2) * 1.0,
+			\amp, 0.2,
+			\rel, 0.7,
+			\dist, Pseries(0.1, 0.1, 16)
+		);
 	};
 
 	///////
@@ -277,18 +328,38 @@ s.waitForBoot {
 			}.play(args: [\bufnum, ~establishTCPSample]);
 			32.wait;
 
+
 			//////////////////////////////// 80 beats
 
 			~thirdIntro.start;
+			16.wait;
 			{ |rate=1, bufnum|
 				PlayBuf.ar(1, bufnum, rate * BufRateScale.kr(bufnum), doneAction: Done.freeSelf).dup;
 			}.play(args: [\bufnum, ~handshakeCompleteSample]);
-			32.wait;
+			16.wait;
 
-			//////////////////////////////// 114 beats
+			//////////////////////////////// 112 beats
+
+			~fourthIntro.start;
+			16.wait;
+			~drumKicks.start;
+			4.wait;
+			{ |rate=1, bufnum|
+				PlayBuf.ar(1, bufnum, rate * BufRateScale.kr(bufnum), doneAction: Done.freeSelf).dup;
+			}.play(args: [\bufnum, ~hackMainframeSample]);
+			4.wait;
+			~drumKicks.start;
+			8.wait;
+			~drumKicks.start;
+			2.wait;
+
+			//////////////////////////////// 146 beats
+
+			6.wait;
+			~drumKicks.start;
+			8.wait;
 
 			//////////////////////////////// ??? beats
-
 			//////////////////////////////// 360 beats
 		};
 	};
