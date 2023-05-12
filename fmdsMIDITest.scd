@@ -15,7 +15,7 @@ MIDIIn.connectAll;
 MIDIdef.noteOn(\FMDS, {arg vel, note;
 	// ~mainCaller.value(note, vel, (presetz[0] * 128) + presetz[1]);
 	[note, vel].postln;
-	~mainCaller.value(note, vel, 100);
+	~mainCaller.value(note, vel, 8503);
 }).add;
 
 // 128 bass, 100 high notes
