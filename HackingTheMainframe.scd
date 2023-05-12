@@ -64,15 +64,17 @@ s.waitForBoot {
 		~connectSuccessSample = Buffer.read(s, thisProcess.nowExecutingPath.dirname +/+ "hackerVoice/connectSuccess.aiff");
 		~establishTCPSample = Buffer.read(s, thisProcess.nowExecutingPath.dirname +/+ "hackerVoice/establishTCP.aiff");
 		~handshakeCompleteSample = Buffer.read(s, thisProcess.nowExecutingPath.dirname +/+ "hackerVoice/handshakeComplete.aiff");
-		// idk what to call this yet TODO TODO TODO
+		// melody part
 		~hackMainframeSample = Buffer.read(s, thisProcess.nowExecutingPath.dirname +/+ "hackerVoice/hackMainframe.aiff");
 		~weAreInSample = Buffer.read(s, thisProcess.nowExecutingPath.dirname +/+ "hackerVoice/weAreIn.aiff");
 		~copyingDataSample = Buffer.read(s, thisProcess.nowExecutingPath.dirname +/+ "hackerVoice/copyingData.aiff");
 		~nowWeWaitSample = Buffer.read(s, thisProcess.nowExecutingPath.dirname +/+ "hackerVoice/nowWeWait.aiff");
+		// error part
 		~kernelProblemSample = Buffer.read(s, thisProcess.nowExecutingPath.dirname +/+ "hackerVoice/kernelProblem.aiff");
 		~onToUsSample = Buffer.read(s, thisProcess.nowExecutingPath.dirname +/+ "hackerVoice/onToUs.aiff");
 		~traceSourceSample = Buffer.read(s, thisProcess.nowExecutingPath.dirname +/+ "hackerVoice/traceSource.aiff");
 		~exfiltrateDataSample = Buffer.read(s, thisProcess.nowExecutingPath.dirname +/+ "hackerVoice/exfiltrateData.aiff");
+		// alarm part
 		~intruderDetectedSample = Buffer.read(s, thisProcess.nowExecutingPath.dirname +/+ "hackerVoice/intruderDetected.aiff");
 		~intruderAlertSample = Buffer.read(s, thisProcess.nowExecutingPath.dirname +/+ "hackerVoice/intruderAlert.aiff");
 		~transferCompleteSample = Buffer.read(s, thisProcess.nowExecutingPath.dirname +/+ "hackerVoice/transferComplete.aiff");
@@ -247,13 +249,206 @@ s.waitForBoot {
 			"Done with 4th Intro 15415/8053".postln;
 		};
 
-		~drumKicks = Task {
+		~drumz = Task {
 			Ndef(\kick808, Pdef(\kick808)).play;
 			Ndef(\clap, Pdef(\clap)).play;
 			8.wait;
+		};
+
+		~drumzAlt = Task {
 			Ndef(\kick808, Pdef(\kick808)).play;
 			Ndef(\clap, Pdef(\clap)).play;
 			8.wait;
+		};
+
+		~rapidDrums = Task {
+			Ndef(\kick808, Pdef(\rapidkick808)).play;
+			Ndef(\clap, Pdef(\rapidclap)).play;
+			8.wait;
+			Ndef(\kick808, Pdef(\rapidkick808)).play;
+			Ndef(\clap, Pdef(\rapidclap)).play;
+			8.wait;
+			Ndef(\kick808, Pdef(\rapidkick808)).play;
+			Ndef(\clap, Pdef(\rapidclap)).play;
+			8.wait;
+			Ndef(\kick808, Pdef(\rapidkick808)).play;
+			Ndef(\clap, Pdef(\rapidclap)).play;
+		};
+
+		~melody80v25 = Task {
+			~mainCaller.value(71, 25, 80); 1.wait;
+			~mainCaller.value(71, 0); ~mainCaller.value(73, 25, 80); 1.wait;
+			~mainCaller.value(73, 0); ~mainCaller.value(74, 25, 80); 1.wait;
+			~mainCaller.value(74, 0); ~mainCaller.value(71, 25, 80); 1.wait;
+			~mainCaller.value(71, 0); ~mainCaller.value(77, 25, 80); 1.wait;
+			~mainCaller.value(77, 0); ~mainCaller.value(74, 25, 80); 1.wait;
+			~mainCaller.value(74, 0); ~mainCaller.value(71, 25, 80); 1.wait;
+			~mainCaller.value(71, 0); ~mainCaller.value(70, 25, 80); 1.wait;
+			~mainCaller.value(70, 0);
+
+			~mainCaller.value(71, 25, 80); 1.wait;
+			~mainCaller.value(71, 0); ~mainCaller.value(73, 25, 80); 1.wait;
+			~mainCaller.value(73, 0); ~mainCaller.value(74, 25, 80); 1.wait;
+			~mainCaller.value(74, 0); ~mainCaller.value(71, 25, 80); 1.wait;
+			~mainCaller.value(71, 0); ~mainCaller.value(77, 25, 80); 1.wait;
+			~mainCaller.value(77, 0); ~mainCaller.value(74, 25, 80); 1.wait;
+			~mainCaller.value(74, 0); ~mainCaller.value(71, 25, 80); 1.wait;
+			~mainCaller.value(71, 0); ~mainCaller.value(70, 25, 80); 1.wait;
+			~mainCaller.value(70, 0);
+		};
+
+		~bassline68v25 = Task {
+			~mainCaller.value(35, 25, 68); 1.wait;
+			~mainCaller.value(35, 0); ~mainCaller.value(38, 25, 68); 1.wait;
+			~mainCaller.value(38, 0); ~mainCaller.value(46, 25, 68); 1.wait;
+			~mainCaller.value(46, 0); ~mainCaller.value(47, 25, 68); 1.wait;
+			~mainCaller.value(47, 0); ~mainCaller.value(45, 25, 68); 1.wait;
+			~mainCaller.value(45, 0); ~mainCaller.value(43, 25, 68); 1.wait;
+			~mainCaller.value(43, 0); ~mainCaller.value(38, 25, 68); 1.wait;
+			~mainCaller.value(38, 0); ~mainCaller.value(35, 25, 68); 1.wait;
+			~mainCaller.value(35, 0);
+
+			~mainCaller.value(35, 25, 68); 1.wait;
+			~mainCaller.value(35, 0); ~mainCaller.value(38, 25, 68); 1.wait;
+			~mainCaller.value(38, 0); ~mainCaller.value(46, 25, 68); 1.wait;
+			~mainCaller.value(46, 0); ~mainCaller.value(47, 25, 68); 1.wait;
+			~mainCaller.value(47, 0); ~mainCaller.value(45, 25, 68); 1.wait;
+			~mainCaller.value(45, 0); ~mainCaller.value(43, 25, 68); 1.wait;
+			~mainCaller.value(43, 0); ~mainCaller.value(38, 25, 68); 1.wait;
+			~mainCaller.value(38, 0); ~mainCaller.value(35, 25, 68); 1.wait;
+			~mainCaller.value(35, 0);
+		};
+
+		~melody80v50 = Task {
+			~mainCaller.value(71, 50, 80); 1.wait;
+			~mainCaller.value(71, 0); ~mainCaller.value(73, 50, 80); 1.wait;
+			~mainCaller.value(73, 0); ~mainCaller.value(74, 50, 80); 1.wait;
+			~mainCaller.value(74, 0); ~mainCaller.value(71, 50, 80); 1.wait;
+			~mainCaller.value(71, 0); ~mainCaller.value(77, 50, 80); 1.wait;
+			~mainCaller.value(77, 0); ~mainCaller.value(74, 50, 80); 1.wait;
+			~mainCaller.value(74, 0); ~mainCaller.value(71, 50, 80); 1.wait;
+			~mainCaller.value(71, 0); ~mainCaller.value(70, 50, 80); 1.wait;
+			~mainCaller.value(70, 0);
+
+			~mainCaller.value(71, 50, 80); 1.wait;
+			~mainCaller.value(71, 0); ~mainCaller.value(73, 50, 80); 1.wait;
+			~mainCaller.value(73, 0); ~mainCaller.value(74, 50, 80); 1.wait;
+			~mainCaller.value(74, 0); ~mainCaller.value(71, 50, 80); 1.wait;
+			~mainCaller.value(71, 0); ~mainCaller.value(77, 50, 80); 1.wait;
+			~mainCaller.value(77, 0); ~mainCaller.value(74, 50, 80); 1.wait;
+			~mainCaller.value(74, 0); ~mainCaller.value(71, 50, 80); 1.wait;
+			~mainCaller.value(71, 0); ~mainCaller.value(70, 50, 80); 1.wait;
+			~mainCaller.value(70, 0);
+		};
+
+		~bassline68v50 = Task {
+			~mainCaller.value(35, 50, 68); 1.wait;
+			~mainCaller.value(35, 0); ~mainCaller.value(38, 50, 68); 1.wait;
+			~mainCaller.value(38, 0); ~mainCaller.value(46, 50, 68); 1.wait;
+			~mainCaller.value(46, 0); ~mainCaller.value(47, 50, 68); 1.wait;
+			~mainCaller.value(47, 0); ~mainCaller.value(45, 50, 68); 1.wait;
+			~mainCaller.value(45, 0); ~mainCaller.value(43, 50, 68); 1.wait;
+			~mainCaller.value(43, 0); ~mainCaller.value(38, 50, 68); 1.wait;
+			~mainCaller.value(38, 0); ~mainCaller.value(35, 50, 68); 1.wait;
+			~mainCaller.value(35, 0);
+
+			~mainCaller.value(35, 50, 68); 1.wait;
+			~mainCaller.value(35, 0); ~mainCaller.value(38, 50, 68); 1.wait;
+			~mainCaller.value(38, 0); ~mainCaller.value(46, 50, 68); 1.wait;
+			~mainCaller.value(46, 0); ~mainCaller.value(47, 50, 68); 1.wait;
+			~mainCaller.value(47, 0); ~mainCaller.value(45, 50, 68); 1.wait;
+			~mainCaller.value(45, 0); ~mainCaller.value(43, 50, 68); 1.wait;
+			~mainCaller.value(43, 0); ~mainCaller.value(38, 50, 68); 1.wait;
+			~mainCaller.value(38, 0); ~mainCaller.value(35, 50, 68); 1.wait;
+			~mainCaller.value(35, 0);
+		};
+
+		~melody80v75 = Task {
+			~mainCaller.value(71, 75, 80); 1.wait;
+			~mainCaller.value(71, 0); ~mainCaller.value(73, 75, 80); 1.wait;
+			~mainCaller.value(73, 0); ~mainCaller.value(74, 75, 80); 1.wait;
+			~mainCaller.value(74, 0); ~mainCaller.value(71, 75, 80); 1.wait;
+			~mainCaller.value(71, 0); ~mainCaller.value(77, 75, 80); 1.wait;
+			~mainCaller.value(77, 0); ~mainCaller.value(74, 75, 80); 1.wait;
+			~mainCaller.value(74, 0); ~mainCaller.value(71, 75, 80); 1.wait;
+			~mainCaller.value(71, 0); ~mainCaller.value(70, 75, 80); 1.wait;
+			~mainCaller.value(70, 0);
+
+			~mainCaller.value(71, 75, 80); 1.wait;
+			~mainCaller.value(71, 0); ~mainCaller.value(73, 75, 80); 1.wait;
+			~mainCaller.value(73, 0); ~mainCaller.value(74, 75, 80); 1.wait;
+			~mainCaller.value(74, 0); ~mainCaller.value(71, 75, 80); 1.wait;
+			~mainCaller.value(71, 0); ~mainCaller.value(77, 75, 80); 1.wait;
+			~mainCaller.value(77, 0); ~mainCaller.value(74, 75, 80); 1.wait;
+			~mainCaller.value(74, 0); ~mainCaller.value(71, 75, 80); 1.wait;
+			~mainCaller.value(71, 0); ~mainCaller.value(70, 75, 80); 1.wait;
+			~mainCaller.value(70, 0);
+		};
+
+		~bassline68v75 = Task {
+			~mainCaller.value(35, 75, 68); 1.wait;
+			~mainCaller.value(35, 0); ~mainCaller.value(38, 75, 68); 1.wait;
+			~mainCaller.value(38, 0); ~mainCaller.value(46, 75, 68); 1.wait;
+			~mainCaller.value(46, 0); ~mainCaller.value(47, 75, 68); 1.wait;
+			~mainCaller.value(47, 0); ~mainCaller.value(45, 75, 68); 1.wait;
+			~mainCaller.value(45, 0); ~mainCaller.value(43, 75, 68); 1.wait;
+			~mainCaller.value(43, 0); ~mainCaller.value(38, 75, 68); 1.wait;
+			~mainCaller.value(38, 0); ~mainCaller.value(35, 75, 68); 1.wait;
+			~mainCaller.value(35, 0);
+
+			~mainCaller.value(35, 75, 68); 1.wait;
+			~mainCaller.value(35, 0); ~mainCaller.value(38, 75, 68); 1.wait;
+			~mainCaller.value(38, 0); ~mainCaller.value(46, 75, 68); 1.wait;
+			~mainCaller.value(46, 0); ~mainCaller.value(47, 75, 68); 1.wait;
+			~mainCaller.value(47, 0); ~mainCaller.value(45, 75, 68); 1.wait;
+			~mainCaller.value(45, 0); ~mainCaller.value(43, 75, 68); 1.wait;
+			~mainCaller.value(43, 0); ~mainCaller.value(38, 75, 68); 1.wait;
+			~mainCaller.value(38, 0); ~mainCaller.value(35, 75, 68); 1.wait;
+			~mainCaller.value(35, 0);
+		};
+
+		~melody80v100 = Task {
+			~mainCaller.value(71, 100, 80); 1.wait;
+			~mainCaller.value(71, 0); ~mainCaller.value(73, 100, 80); 1.wait;
+			~mainCaller.value(73, 0); ~mainCaller.value(74, 100, 80); 1.wait;
+			~mainCaller.value(74, 0); ~mainCaller.value(71, 100, 80); 1.wait;
+			~mainCaller.value(71, 0); ~mainCaller.value(77, 100, 80); 1.wait;
+			~mainCaller.value(77, 0); ~mainCaller.value(74, 100, 80); 1.wait;
+			~mainCaller.value(74, 0); ~mainCaller.value(71, 100, 80); 1.wait;
+			~mainCaller.value(71, 0); ~mainCaller.value(70, 100, 80); 1.wait;
+			~mainCaller.value(70, 0);
+
+			~mainCaller.value(71, 100, 80); 1.wait;
+			~mainCaller.value(71, 0); ~mainCaller.value(73, 100, 80); 1.wait;
+			~mainCaller.value(73, 0); ~mainCaller.value(74, 100, 80); 1.wait;
+			~mainCaller.value(74, 0); ~mainCaller.value(71, 100, 80); 1.wait;
+			~mainCaller.value(71, 0); ~mainCaller.value(77, 100, 80); 1.wait;
+			~mainCaller.value(77, 0); ~mainCaller.value(74, 100, 80); 1.wait;
+			~mainCaller.value(74, 0); ~mainCaller.value(71, 100, 80); 1.wait;
+			~mainCaller.value(71, 0); ~mainCaller.value(70, 100, 80); 1.wait;
+			~mainCaller.value(70, 0);
+		};
+
+		~bassline68v100 = Task {
+			~mainCaller.value(35, 100, 68); 1.wait;
+			~mainCaller.value(35, 0); ~mainCaller.value(38, 100, 68); 1.wait;
+			~mainCaller.value(38, 0); ~mainCaller.value(46, 100, 68); 1.wait;
+			~mainCaller.value(46, 0); ~mainCaller.value(47, 100, 68); 1.wait;
+			~mainCaller.value(47, 0); ~mainCaller.value(45, 100, 68); 1.wait;
+			~mainCaller.value(45, 0); ~mainCaller.value(43, 100, 68); 1.wait;
+			~mainCaller.value(43, 0); ~mainCaller.value(38, 100, 68); 1.wait;
+			~mainCaller.value(38, 0); ~mainCaller.value(35, 100, 68); 1.wait;
+			~mainCaller.value(35, 0);
+
+			~mainCaller.value(35, 100, 68); 1.wait;
+			~mainCaller.value(35, 0); ~mainCaller.value(38, 100, 68); 1.wait;
+			~mainCaller.value(38, 0); ~mainCaller.value(46, 100, 68); 1.wait;
+			~mainCaller.value(46, 0); ~mainCaller.value(47, 100, 68); 1.wait;
+			~mainCaller.value(47, 0); ~mainCaller.value(45, 100, 68); 1.wait;
+			~mainCaller.value(45, 0); ~mainCaller.value(43, 100, 68); 1.wait;
+			~mainCaller.value(43, 0); ~mainCaller.value(38, 100, 68); 1.wait;
+			~mainCaller.value(38, 0); ~mainCaller.value(35, 100, 68); 1.wait;
+			~mainCaller.value(35, 0);
 		};
 	};
 
@@ -282,6 +477,29 @@ s.waitForBoot {
 			\dur, Pseq([
 				Rest(5/2), 1/2,
 				Rest(1/2), 1/2
+			], 2) * 1.0,
+			\amp, 0.2,
+			\rel, 0.7,
+			\dist, Pseries(0.1, 0.1, 16)
+		);
+
+		Pbindef(\rapidkick808,
+			\instrument, "kick808",
+			\dur, Pseq([
+				1/2, 1/2,
+				1/2, 1/2,
+				1/2, 1/2,
+				1/2, 1/2,
+			], 2) * 1.0,
+			\amp, 0.2,
+			\rel, 0.7,
+			\dist, Pseries(0.1, 0.1, 16)
+		);
+
+		Pbindef(\rapidclap,
+			\instrument, "clap",
+			\dur, Pseq([
+				Rest(7/2), 1/2,
 			], 2) * 1.0,
 			\amp, 0.2,
 			\rel, 0.7,
@@ -342,24 +560,81 @@ s.waitForBoot {
 
 			~fourthIntro.start;
 			16.wait;
-			~drumKicks.start;
+			~drumz.start;
 			4.wait;
 			{ |rate=1, bufnum|
 				PlayBuf.ar(1, bufnum, rate * BufRateScale.kr(bufnum), doneAction: Done.freeSelf).dup;
 			}.play(args: [\bufnum, ~hackMainframeSample]);
 			4.wait;
-			~drumKicks.start;
+			~drumz.start;
 			8.wait;
-			~drumKicks.start;
-			2.wait;
+			~drumz.start;
+			// 2.wait;
+			//////////////////////////////// 144 (146) beats
+			~melody80v25.start;
+			~bassline68v25.start;
+			8.wait;
+			~drumzAlt.start;
+			8.wait;
 
-			//////////////////////////////// 146 beats
+			{ |rate=1, bufnum|
+				PlayBuf.ar(1, bufnum, rate * BufRateScale.kr(bufnum), doneAction: Done.freeSelf).dup;
+			}.play(args: [\bufnum, ~weAreInSample]);
 
+			~drumz.start;
+			~melody80v50.start;
+			~bassline68v50.start;
+			8.wait;
+			~drumzAlt.start;
+			8.wait;
+
+			{ |rate=1, bufnum|
+				PlayBuf.ar(1, bufnum, rate * BufRateScale.kr(bufnum), doneAction: Done.freeSelf).dup;
+			}.play(args: [\bufnum, ~copyingDataSample]);
+
+			~rapidDrums.start;
+			~melody80v75.start;
+			~bassline68v75.start;
+			16.wait;
+
+			{ |rate=1, bufnum|
+				PlayBuf.ar(1, bufnum, rate * BufRateScale.kr(bufnum), doneAction: Done.freeSelf).dup;
+			}.play(args: [\bufnum, ~nowWeWaitSample]);
+
+			~melody80v100.start;
+			~bassline68v100.start;
+			16.wait;
+
+			//////////////////////////////// 208 beats
+
+			{ |rate=1, bufnum|
+				PlayBuf.ar(1, bufnum, rate * BufRateScale.kr(bufnum), doneAction: Done.freeSelf).dup;
+			}.play(args: [\bufnum, ~kernelProblemSample]);
+			12.wait;
+
+			{ |rate=1, bufnum|
+				PlayBuf.ar(1, bufnum, rate * BufRateScale.kr(bufnum), doneAction: Done.freeSelf).dup;
+			}.play(args: [\bufnum, ~onToUsSample]);
 			6.wait;
-			~drumKicks.start;
-			8.wait;
 
-			//////////////////////////////// ??? beats
+			{ |rate=1, bufnum|
+				PlayBuf.ar(1, bufnum, rate * BufRateScale.kr(bufnum), doneAction: Done.freeSelf).dup;
+			}.play(args: [\bufnum, ~traceSourceSample]);
+			6.wait;
+
+			{ |rate=1, bufnum|
+				PlayBuf.ar(1, bufnum, rate * BufRateScale.kr(bufnum), doneAction: Done.freeSelf).dup;
+			}.play(args: [\bufnum, ~exfiltrateDataSample]);
+			12.wait;
+
+			//////////////////////////////// ? 244 beats
+
+			{ |rate=1, bufnum|
+				PlayBuf.ar(1, bufnum, rate * BufRateScale.kr(bufnum), doneAction: Done.freeSelf).dup;
+			}.play(args: [\bufnum, ~intruderDetectedSample]);
+			4.wait;
+
+
 			//////////////////////////////// 360 beats
 		};
 	};
